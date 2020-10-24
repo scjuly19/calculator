@@ -1,12 +1,11 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-
+import React from "react";
+import { StyleSheet, Text, View } from "react-native";
+import Calculator from './src/scenes/calculator';
 export default function App() {
+  const data = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+     <Calculator/>
     </View>
   );
 }
@@ -14,8 +13,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+   
   },
+  
 });
