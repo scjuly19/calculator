@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { View, Text, StyleSheet, Dimensions } from "react-native";
+import { ThemeContext, themes } from "../../theme-context";
 import Button from "../components/button";
 const Calculator = () => {
   const numbers = [
     "C",
-    "+/-",
+    "M",
     "%",
     "DEL",
     "7",
@@ -28,10 +29,12 @@ const Calculator = () => {
   const [num2, setNum2] = useState("");
   const [operation, setOperation] = useState("");
   const [result, setResult] = useState("");
-  const [dotClicked, setDotState] = useState([]);
+  const [newTheme, toggleTheme] = useState(themes.dark);
   const handleChange = (text) => {
     if (text === "C") {
       return resetResult();
+    }
+    if (text === "M") {
     }
     if (text === "DEL") {
       return handleBackspace();
@@ -40,19 +43,14 @@ const Calculator = () => {
       if (operation) {
         return;
       } else {
-        setDotState(false)
         return setOperation(text);
       }
     }
     if (text === "=") {
       calculate();
     }
-    if (text === ".") {
-      if (dotClicked) {
-        return;
-      } else {
-        setDotState(text);
-      }
+    if (text === "M") {
+      return toggleTheme(newTheme === themes.dark ? themes.light : themes.dark);
     } else {
       if (num1 && operation) {
         return setNum2(`${num2}${text}`);
@@ -84,27 +82,30 @@ const Calculator = () => {
       setResult(error);
     }
   };
+  const theme = useContext(ThemeContext);
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Calculator</Text>
-      <View style={styles.input}>
-        <Text style={styles.text}>
+    <View style={[styles.container, { backgroundColor: newTheme.background }]}>
+      <Text style={[styles.title,{color:newTheme.color}]}>Calculator</Text>
+      <View style={[styles.input,{borderColor:newTheme.color}]}>
+        <Text style={[styles.text,{color:newTheme.color}]}>
           {result ? result : operation ? `${num1}${operation}${num2}` : num1}
         </Text>
       </View>
       <View style={styles.numContainer}>
         <View style={styles.numbers}>
-          {numbers.map((item, index) => (
-            <Button
-              text={item}
-              style={{
-                backgroundColor: index === 18 ? "coral" : null,
-                marginTop: 10,
-              }}
-              onclick={() => handleChange(item)}
-              // disabled={item === "." && dotClicked}
-            />
-          ))}
+          <ThemeContext.Provider value={newTheme}>
+            {numbers.map((item, index) => (
+              <Button
+                text={item}
+                style={{
+                  backgroundColor: index === 18 ? "coral" : null,
+                  marginTop: 10,
+                }}
+                onclick={() => handleChange(item)}
+                data-testid={item}
+              />
+            ))}
+          </ThemeContext.Provider>
         </View>
       </View>
     </View>

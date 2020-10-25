@@ -1,11 +1,14 @@
-import React from "react";
+import React,{useContext} from "react";
 import { Text, StyleSheet, TouchableOpacity } from "react-native";
+import {ThemeContext} from '../../theme-context';
 
 const Button = (props) => {
+const theme=useContext(ThemeContext);
   const { text, style, textStyle, onclick,disabled } = props;
+
   return (
-    <TouchableOpacity style={[styles.container, style]} onPress={onclick} disabled={disabled}>
-      <Text style={[styles.text, textStyle]}>{text}</Text>
+    <TouchableOpacity style={[styles.container, style,{backgroundColor:theme.background,borderColor:theme.color}]} onPress={onclick} disabled={disabled}>
+      <Text style={[styles.text,{color:theme.color}]}>{text}</Text>
     </TouchableOpacity>
   );
 };
@@ -15,16 +18,13 @@ const styles = StyleSheet.create({
     height: 70,
     width: 70,
     borderRadius: 35,
-    backgroundColor: "black",
-    borderColor: "white",
     borderWidth: 1,
     justifyContent: "center",
     alignItems: "center",
   },
   text: {
-    color: "white",
     fontSize: 32,
   },
 });
-
+Button.contextType=ThemeContext;
 export default Button;
