@@ -1,111 +1,65 @@
 import React, { useState, useContext } from "react";
-import { View, Text, StyleSheet, Dimensions } from "react-native";
+import { View, Text, StyleSheet, Dimensions, Switch } from "react-native";
 import { ThemeContext, themes } from "../../theme-context";
 import Button from "../components/button";
 const Calculator = () => {
-  const numbers = [
-    "C",
-    "M",
-    "%",
-    "DEL",
-    "7",
-    "8",
-    "9",
-    "/",
-    "4",
-    "5",
-    "6",
-    "*",
-    "1",
-    "2",
-    "3",
-    "-",
-    "0",
-    ".",
-    "=",
-    "+",
-  ];
   const [num1, setNum1] = useState("");
   const [num2, setNum2] = useState("");
   const [operation, setOperation] = useState("");
   const [result, setResult] = useState("");
   const [newTheme, toggleTheme] = useState(themes.dark);
-  const handleChange = (text) => {
-    if (text === "C") {
-      return resetResult();
-    }
-    if (text === "M") {
-    }
-    if (text === "DEL") {
-      return handleBackspace();
-    }
-    if (text === "+" || text === "-" || text === "/" || text === "*") {
-      if (operation) {
-        return;
-      } else {
-        return setOperation(text);
-      }
-    }
-    if (text === "=") {
-      calculate();
-    }
-    if (text === "M") {
-      return toggleTheme(newTheme === themes.dark ? themes.light : themes.dark);
-    } else {
-      if (num1 && operation) {
-        return setNum2(`${num2}${text}`);
-      } else {
-        return setNum1(`${num1}${text}`);
-      }
-    }
-  };
-  const handleBackspace = () => {
-    if (result) {
-      return resetResult();
-    }
-    if (operation) {
-      return setNum2(num2.slice(0, -1));
-    } else {
-      return setNum1(num1.slice(0, -1));
-    }
-  };
-  const resetResult = () => {
-    setNum1("");
-    setNum2("");
-    setOperation("");
-    setResult("");
-  };
-  const calculate = () => {
-    try {
-      setResult(eval(`${num1}${operation}${num2}`));
-    } catch (error) {
-      setResult(error);
-    }
-  };
+  const [isEnabled, setIsEnabled] = useState(false);
+
   const theme = useContext(ThemeContext);
+  const toggleSwitch = () => {
+    setIsEnabled(!isEnabled);
+    toggleTheme(newTheme === themes.dark ? themes.light : themes.dark);
+  };
   return (
     <View style={[styles.container, { backgroundColor: newTheme.background }]}>
-      <Text style={[styles.title,{color:newTheme.color}]}>Calculator</Text>
-      <View style={[styles.input,{borderColor:newTheme.color}]}>
-        <Text style={[styles.text,{color:newTheme.color}]}>
+      <Text style={[styles.title, { color: newTheme.color }]}>Calculator</Text>
+      <View style={[styles.input, { borderColor: newTheme.color }]}>
+        <Text style={[styles.text, { color: newTheme.color }]}>
           {result ? result : operation ? `${num1}${operation}${num2}` : num1}
         </Text>
       </View>
+      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+        <ThemeContext.Provider value={newTheme}>
+          <Switch
+            trackColor={{ false: "#767577", true: "#81b0ff" }}
+            thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
+            ios_backgroundColor="#3e3e3e"
+            onValueChange={toggleSwitch}
+            value={isEnabled}
+          />
+        </ThemeContext.Provider>
+      </View>
       <View style={styles.numContainer}>
         <View style={styles.numbers}>
-          <ThemeContext.Provider value={newTheme}>
-            {numbers.map((item, index) => (
-              <Button
-                text={item}
-                style={{
-                  backgroundColor: index === 18 ? "coral" : null,
-                  marginTop: 10,
-                }}
-                onclick={() => handleChange(item)}
-                data-testid={item}
-              />
-            ))}
-          </ThemeContext.Provider>
+          <Button
+            text={"C"}
+            style={{
+              marginTop: 10,
+            }}
+          />
+          <Button
+            text={"C"}
+            style={{
+              marginTop: 10,
+            }}
+          />
+          <Button
+            text={"C"}
+            style={{
+              marginTop: 10,
+            }}
+          />
+          <Button
+            text={"C"}
+            style={{
+              marginTop: 10,
+            }}
+          />
         </View>
       </View>
     </View>
@@ -135,7 +89,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     flexWrap: "wrap",
-    paddingTop: 40,
   },
   numbers: {
     flexDirection: "row",
