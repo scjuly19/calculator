@@ -29,13 +29,13 @@ const Calculator = () => {
     if (type === 'C') {
       return resetAll();
     }
-    if (type === '%' || type === '/' || type === '*' || type === '-' || type === '+') {
+    if (type === '/' || type === '*' || type === '-' || type === '+') {
       if (!num1) {
         return;
       }
       else {
-        setOperation(type)
-        return handleOperation(type);
+        return setOperation(type)
+
       }
     }
     if (type === "=") {
@@ -43,7 +43,7 @@ const Calculator = () => {
     }
     if (type === 'DEL') {
       if (result) {
-        return resetAll()
+        return resetAll();
       }
 
       if (!num2) {
@@ -83,14 +83,17 @@ const Calculator = () => {
     setResult("");
     setOperation("");
   }
-  const handleOperation = (type) => {
+  const calResult = () => {
+    try {
+      const result = eval(`${num1}${operation}${num2}`);
+      setResult(result);
+    }
+    catch (err) {
+      setResult(err)
+    }
 
   }
-  const calResult = () => {
-    const result = eval(`${num1}${operation}${num2}`);
-    setResult(result);
-  }
-  const buttons = ['C', '+/-', '%', 'DEL', '7', '8', '9', '/', '4', '5', '6', '*', '1', '2', '3', '-', '0', '.', '=', '+'];
+  const buttons = ['C', 'DEL', '7', '8', '9', '/', '4', '5', '6', '*', '1', '2', '3', '-', '0', '.', '=', '+'];
   return (
     <View style={[styles.container, { backgroundColor: newTheme.background }]}>
       <ThemeContext.Provider value={newTheme}>
@@ -114,7 +117,7 @@ const Calculator = () => {
           {buttons.map((item, index) => {
             return (<Button
               text={item}
-              style={{ marginTop: 5 }}
+              style={{ marginTop: 5, width: index === 0 || index === 1 ? 130 : 70 }}
               onclick={() => handleClick(item)}
             />)
           })}
