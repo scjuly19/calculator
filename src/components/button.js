@@ -4,10 +4,9 @@ import {ThemeContext} from '../../theme-context';
 
 const Button = (props) => {
 const theme=useContext(ThemeContext);
-  const { text, style, textStyle, onclick,disabled } = props;
-
+  const { text, style, onclick,disabled } = props;
   return (
-    <TouchableOpacity style={[styles.container, style,{backgroundColor:theme.background,borderColor:theme.color}]} onPress={onclick} disabled={disabled}>
+    <TouchableOpacity style={[styles.container, style,{backgroundColor:text==="="?'coral':theme.background,borderColor:theme.color}]} onPress={onclick} disabled={disabled}>
       <Text style={[styles.text,{color:theme.color}]}>{text}</Text>
     </TouchableOpacity>
   );
@@ -26,5 +25,4 @@ const styles = StyleSheet.create({
     fontSize: 32,
   },
 });
-Button.contextType=ThemeContext;
 export default Button;
